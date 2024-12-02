@@ -1,9 +1,10 @@
-from aoc2024 import util, day01
+from aoc2024 import util, day01, day02
 from datetime import datetime
 import humanize
 
 lookup = {
-    1: day01
+    1: day01,
+    2: day02,
 }
 
 
