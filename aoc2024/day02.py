@@ -1,7 +1,7 @@
 def is_safe(levels):
     start = levels[0]
     for level in levels[1:]:
-        if abs(start - level) < 1 or abs(start - level) > 3:
+        if start == level or abs(start - level) > 3:
             break
         start = level
     else:
