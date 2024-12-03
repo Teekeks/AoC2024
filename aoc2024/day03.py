@@ -7,13 +7,10 @@ def process(data):
     r1, r2 = 0, 0
     active = True
     for line in data:
-        matches = RE_MUL.findall(line)
-        for match in matches:
+        for match in RE_MUL.findall(line):
             if match[0] == 'mul':
-                val = int(match[1]) * int(match[2])
-                r1 += val
-                if active:
-                    r2 += val
+                r1 += int(match[1]) * int(match[2])
+                r2 += int(match[1]) * int(match[2]) if active else 0
             else:
                 active = match[0] == 'do'
     return r1, r2
