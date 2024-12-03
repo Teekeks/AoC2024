@@ -17,7 +17,7 @@ def human_format(num):
         magnitude += 1
         num /= 1000.0
     # add more suffixes if you need them
-    return f'%.{"0" if magnitude <= 1 else "1"}f%s' % (num, ['ns', 'μs', 'ms', 's'][magnitude])
+    return f'%.{"0" if magnitude <= 1 else "1"}f %s' % (num, ['nanoseconds', 'microseconds', 'milliseconds', 'seconds'][magnitude])
 
 
 if __name__ == '__main__':
@@ -37,7 +37,9 @@ if __name__ == '__main__':
     target_day = target_day.zfill(2)
     if not Path(f'aoc2024/day{target_day}.py').is_file():
         # create from template
+        print(f'{Fore.YELLOW}Generating day {target_day}...')
         shutil.copyfile('template/day.py', f'aoc2024/day{target_day}.py')
+    print(f'{Fore.YELLOW}Running day {target_day} ({Fore.CYAN}https://adventofcode.com/2024/day/{int(target_day)}{Fore.YELLOW})...')
     data = util.get_data(int(target_day))
     day_module = import_module(f'aoc2024.day{target_day}')
     start_time = perf_counter_ns()
