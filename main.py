@@ -1,29 +1,50 @@
-from aoc2024 import util, day01, day02, day03
+import shutil
+import sys
+from time import perf_counter_ns
+
+from aoc2024 import util
 from datetime import datetime
-import humanize
+from colorama import init as colorama_init, Fore
+from importlib import import_module
+from pathlib import Path
 
-lookup = {
-    1: day01,
-    2: day02,
-    3: day03,
-}
+colorama_init(autoreset=True)
 
 
-def default():
-    print('current day not there yet')
+def human_format(num):
+    magnitude = 0
+    while abs(num) >= 1000:
+        magnitude += 1
+        num /= 1000.0
+    # add more suffixes if you need them
+    return f'%.{"0" if magnitude <= 1 else "1"}f%s' % (num, ['ns', 'μs', 'ms', 's'][magnitude])
 
 
-# execute current day
 if __name__ == '__main__':
-    current_day = datetime.today().day
-    if current_day not in lookup:
-        default()
+    today = datetime.today()
+
+    if len(sys.argv) == 1:
+        if today.year != 2024 or today.month != 12:
+            print(f'{Fore.RED}Error: Can\'t run without specific day outside of competition time.')
+            exit(1)
+        target_day = str(today.day)
     else:
-        data = util.get_data(current_day)
-        start = datetime.now()
-        r1, r2 = lookup[current_day].process(data)
-        elapsed = datetime.now() - start
-        print(f'Part 1: {r1}\n'
-              f'Part 2: {r2}\n'
-              f'Elapsed: {humanize.precisedelta(elapsed, minimum_unit='microseconds')}')
+        target_day = sys.argv[1]
+
+    if int(target_day) > today.day and today.year == 2024:
+        print(f'{Fore.RED}Error: Can\'t run future day')
+        exit(1)
+    target_day = target_day.zfill(2)
+    if not Path(f'aoc2024/day{target_day}.py').is_file():
+        # create from template
+        shutil.copyfile('template/day.py', f'aoc2024/day{target_day}.py')
+    data = util.get_data(int(target_day))
+    day_module = import_module(f'aoc2024.day{target_day}')
+    start_time = perf_counter_ns()
+    r1, r2 = day_module.process(data)
+    elapsed = perf_counter_ns() - start_time
+    print(f'Part 1: {Fore.CYAN}{r1}')
+    print(f'Part 2: {Fore.CYAN}{r2}')
+    print(f'Elapsed: {Fore.GREEN}{human_format(elapsed)}')
+
 
