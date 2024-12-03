@@ -17,7 +17,7 @@ def human_format(num):
         magnitude += 1
         num /= 1000.0
     # add more suffixes if you need them
-    return f'%.{"0" if magnitude <= 1 else "1"}f %s' % (num, ['nanoseconds', 'microseconds', 'milliseconds', 'seconds'][magnitude])
+    return f'%.{"0" if magnitude < 1 else "1"}f %s' % (num, ['nanoseconds', 'microseconds', 'milliseconds', 'seconds'][magnitude])
 
 
 if __name__ == '__main__':
