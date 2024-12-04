@@ -1,6 +1,4 @@
 def get(data, x, y, dirx, diry):
-    if dirx == 0 and diry == 0:
-        return 0
     ax, ay = x + dirx, y + diry
     word = 'MAS'
     for ch in word:
@@ -16,7 +14,7 @@ def process(data):
     for x in range(len(data)):
         for y in range(len(data[x])):
             if data[x][y] == 'X':
-                r1 += sum(get(data, x, y, dx, dy) for dx in range(-1, 2) for dy in range(-1, 2))
+                r1 += sum(get(data, x, y, dx, dy) for dx in range(-1, 2) for dy in range(-1, 2) if not (dx == 0 and dy == 0))
             if data[x][y] == 'A':
                 if (not (x < 1 or y < 1 or x >= len(data) - 1 or y >= len(data[x]) - 1) and
                         ((data[x - 1][y - 1] == 'M' and data[x + 1][y + 1] == 'S') or (data[x - 1][y - 1] == 'S' and data[x + 1][y + 1] == 'M')) and
