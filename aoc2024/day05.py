@@ -13,35 +13,28 @@ def is_ordered(l, rules) -> bool:
 
 
 def process(data):
-    before = {}
-    pages = []
+    r1, r2 = 0, 0
+    rules = {}
     for line in data:
         if '|' in line:
             p1, p2 = map(int, line.split('|'))
-            if p1 in before:
-                before[p1].append(p2)
+            if p1 in rules:
+                rules[p1].append(p2)
             else:
-                before[p1] = [p2]
+                rules[p1] = [p2]
         elif ',' in line:
-            pages.append(list(map(int, line.split(','))))
-    ordered_pages = []
-    unordered_pages = []
-    for page in pages:
-        if is_ordered(page, before):
-            ordered_pages.append(page)
-        else:
-            unordered_pages.append(page)
-    r1 = sum([o[len(o) // 2] for o in ordered_pages])
-    new_ordered = []
-    for page in unordered_pages:
-        remaining = set(page)
-        new_page = []
-        while remaining:
-            for n in remaining:
-                if len(intersection(before.get(n, []), remaining)) == (len(remaining) - 1):
-                    new_page.append(n)
-                    remaining.remove(n)
-                    break
-        new_ordered.append(new_page)
-    r2 = sum([o[len(o) // 2] for o in new_ordered])
+            page = list(map(int, line.split(',')))
+            if is_ordered(page, rules):
+                r1 += page[len(page) // 2]
+            else:
+                # is unordered -> find ordered
+                remaining = set(page)
+                new_page = []
+                while remaining:
+                    for n in remaining:
+                        if len(intersection(rules.get(n, []), remaining)) == (len(remaining) - 1):
+                            new_page.append(n)
+                            remaining.remove(n)
+                            break
+                r2 += new_page[len(new_page) // 2]
     return r1, r2
