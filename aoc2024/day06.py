@@ -41,10 +41,10 @@ def count_steps() -> int:
 
 def process(data):
     global W, H, obstacles, start
-    obstacles = [[data[x][y] == '#' for y in range(len(data[0]) - 1)] for x in range(len(data))]
-    H = len(obstacles)
-    W = len(obstacles[0])
+    H = len(data)
+    W = len(data[0]) - 1
+    obstacles = [[data[x][y] == '#' for y in range(H)] for x in range(W)]
     start = next((x, y) for x in range(H) for y in range(W) if data[x][y] == '^')
     r1 = count_steps()
-    r2 = sum(1 if is_loop(x, y) else 0 for x in range(H) for y in range(W) if not obstacles[x][y] and (x, y) != start)
+    r2 = sum(is_loop(x, y) for x in range(H) for y in range(W) if not obstacles[x][y] and (x, y) != start)
     return r1, r2
