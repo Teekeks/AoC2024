@@ -22,7 +22,7 @@ def is_loop(ax, ay) -> bool:
             px, py = px + dx, py + dy
 
 
-def count_steps() -> set:
+def get_steps() -> set:
     px, py = start
     visited = set()
     dx, dy = -1, 0
@@ -45,7 +45,7 @@ def process(data):
     W = len(data[0]) - 1
     obstacles = [[data[x][y] == '#' for y in range(H)] for x in range(W)]
     start = next((x, y) for x in range(H) for y in range(W) if data[x][y] == '^')
-    visited = count_steps()
+    visited = get_steps()
     r1 = len(visited)
     r2 = sum(is_loop(*a) for a in visited if a != start)
     return r1, r2
