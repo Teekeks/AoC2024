@@ -9,7 +9,7 @@ def is_loop(ax, ay) -> bool:
     visited_dirs = set()
     while True:
         # reached finish
-        if px < 0 or py < 0 or px >= H or py >= W:
+        if not (0 <= px < W and 0 <= py < H):
             return False
         if obstacles[px][py] or (ax == px and ay == py):
             # step back & turn 90°
@@ -28,7 +28,7 @@ def get_steps() -> set:
     dx, dy = -1, 0
     while True:
         # reached finish
-        if px < 0 or py < 0 or px >= H or py >= W:
+        if not (0 <= px < W and 0 <= py < H):
             return visited
         if obstacles[px][py]:
             # step back & turn 90°
