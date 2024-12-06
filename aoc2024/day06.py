@@ -1,70 +1,50 @@
-walk_dir_lookup = {
-    '^': (-1, 0),
-    'v': (1, 0),
-    '>': (0, 1),
-    '<': (0, -1),
-}
-turn_lookup = {
-    (-1, 0): (0, 1),
-    (0, 1): (1, 0),
-    (1, 0): (0, -1),
-    (0, -1): (-1, 0),
-}
+W, H = 0, 0
+obstacles = []
+start = set()
 
 
-def is_loop(obstacles, start_pos, start_dir) -> bool:
-    px, py = start_pos
+def is_loop(ax, ay) -> bool:
+    px, py = start
+    dx, dy = -1, 0
     visited_dirs = set()
-    walk_dir = start_dir
     while True:
         # reached finish
-        if px < 0 or py < 0 or px >= len(obstacles) or py >= len(obstacles[px]):
+        if px < 0 or py < 0 or px >= H or py >= W:
             return False
-        if obstacles[px][py]:
-            # turn 90°
-            px, py = px - walk_dir[0], py - walk_dir[1]
-            walk_dir = turn_lookup[walk_dir]
-        elif (px, py, walk_dir[0], walk_dir[1]) in visited_dirs:
+        if obstacles[px][py] or (ax == px and ay == py):
+            # step back & turn 90°
+            px, py = px - dx, py - dy
+            dx, dy = dy, -dx
+        elif (px, py, dx, dy) in visited_dirs:
             return True
         else:
-            visited_dirs.add((px, py, walk_dir[0], walk_dir[1]))
-            px, py = px + walk_dir[0], py + walk_dir[1]
+            visited_dirs.add((px, py, dx, dy))
+            px, py = px + dx, py + dy
+
+
+def count_steps() -> int:
+    px, py = start
+    visited = set()
+    dx, dy = -1, 0
+    while True:
+        # reached finish
+        if px < 0 or py < 0 or px >= H or py >= W:
+            return len(visited)
+        if obstacles[px][py]:
+            # step back & turn 90°
+            px, py = px - dx, py - dy
+            dx, dy = dy, -dx
+        else:
+            visited.add((px, py))
+            px, py = px + dx, py + dy
 
 
 def process(data):
-    start = None
-    obstacles = []
-    visited = set()
-    start_dir = None
-    for x in range(len(data)):
-        obstacles.append([])
-        for y in range(len(data[x]) - 1):
-            obstacles[x].append(data[x][y] == '#')
-            if data[x][y] in walk_dir_lookup:
-                start = (x, y)
-                start_dir = walk_dir_lookup[data[x][y]]
-    walk_dir = start_dir
-    position = start
-    while True:
-        visited.add(position)
-        mov = (position[0] + walk_dir[0], position[1] + walk_dir[1])
-        # reached finish
-        if mov[0] < 0 or mov[1] < 0 or mov[0] >= len(obstacles) or mov[1] >= len(obstacles[mov[0]]):
-            break
-        if obstacles[mov[0]][mov[1]]:
-            # turn 90°
-            walk_dir = turn_lookup[walk_dir]
-            mov = (position[0] + walk_dir[0], position[1] + walk_dir[1])
-        position = mov
-    r1 = len(visited)
-    possible = []
-    for x in range(len(obstacles)):
-        for y in range(len(obstacles[x])):
-            if not obstacles[x][y] and (x, y) != start:
-                obstacles[x][y] = True
-                if is_loop(obstacles, start, start_dir):
-                    possible.append((x, y))
-                obstacles[x][y] = False
-
-    r2 = len(possible)
+    global W, H, obstacles, start
+    obstacles = [[data[x][y] == '#' for y in range(len(data[0]) - 1)] for x in range(len(data))]
+    H = len(obstacles)
+    W = len(obstacles[0])
+    start = next((x, y) for x in range(H) for y in range(W) if data[x][y] == '^')
+    r1 = count_steps()
+    r2 = sum(1 if is_loop(x, y) else 0 for x in range(H) for y in range(W) if not obstacles[x][y] and (x, y) != start)
     return r1, r2
