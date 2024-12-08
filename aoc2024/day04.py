@@ -10,7 +10,7 @@ def get(data, x, y, dirx, diry):
 
 def process(data):
     r1, r2 = 0, 0
-    data = [list(x)[:-1] for x in data]
+    data = [list(x) for x in data]
     for x in range(len(data)):
         for y in range(len(data[x])):
             if data[x][y] == 'X':

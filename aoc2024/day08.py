@@ -3,7 +3,6 @@ from collections import defaultdict
 
 
 def process(data):
-    # data = ''.join(data).split('\n')[:-1]
     w, h = len(data), len(data[0])
     antenas = defaultdict(set)
     p1 = set()

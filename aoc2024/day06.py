@@ -42,7 +42,7 @@ def get_steps() -> set:
 def process(data):
     global W, H, obstacles, start
     H = len(data)
-    W = len(data[0]) - 1
+    W = len(data[0])
     obstacles = [[data[x][y] == '#' for y in range(H)] for x in range(W)]
     start = next((x, y) for x in range(H) for y in range(W) if data[x][y] == '^')
     visited = get_steps()
