@@ -20,7 +20,9 @@ def process(data):
         for (ax, ay), (bx, by) in combinations(nodes, 2):
             p2.add((ax, ay))
             p2.add((bx, by))
+            # mid point
             dx, dy = bx - ax, by - ay
+            # resonance 1
             nx, ny = ax - dx, ay - dy
             if in_bounds(nx, ny):
                 p1.add((nx, ny))
@@ -28,6 +30,7 @@ def process(data):
                 p2.add((nx, ny))
                 nx -= dx
                 ny -= dy
+            # resonance 2
             mx, my = bx + dx, by + dy
             if in_bounds(mx, my):
                 p1.add((mx, my))
