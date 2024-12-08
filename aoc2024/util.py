@@ -7,7 +7,7 @@ import json
 def get_data(day: int):
     if os.path.isfile(f'data/{day}.txt'):
         with open(f'data/{day}.txt') as f:
-            return [s for s in f.readlines()]
+            return [s[:-1] for s in f.readlines()]
     with open('config.json', 'r') as f:
         cfg = json.load(f)
     cookies = {
@@ -21,4 +21,4 @@ def get_data(day: int):
         for line in req.text.splitlines():
             f.write(f'{line}\n')
     with open(f'data/{day}.txt') as f:
-        return [s for s in f.readlines()]
+        return [s[:-1] for s in f.readlines()]
