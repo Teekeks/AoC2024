@@ -1,4 +1,5 @@
 from collections import deque
+from aoc2024.util import range_2d
 
 W, H = 0, 0
 
@@ -26,7 +27,7 @@ def process(data):
     global W, H
     H = len(data)
     W = len(data[0])
-    for trailhead in [(x, y) for y in range(H) for x in range(W) if data[x][y] == 0]:
+    for trailhead in [(x, y) for x, y in range_2d(W, H) if data[x][y] == 0]:
         r1 += find_tops(data, trailhead)
         r2 += find_tops(data, trailhead, is_p2=True)
     return r1, r2

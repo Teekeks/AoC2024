@@ -22,3 +22,9 @@ def get_data(day: int):
             f.write(f'{line}\n')
     with open(f'data/{day}.txt') as f:
         return [s[:-1] for s in f.readlines()]
+
+
+def range_2d(x, y) -> set:
+    for _x in range(x):
+        for _y in range(y):
+            yield _x, _y
