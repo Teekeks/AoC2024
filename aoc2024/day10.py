@@ -13,6 +13,7 @@ def find_tops(data, start, is_p2=False) -> int:
             visited.add(p)
         if data[p[0]][p[1]] == 9:
             s += 1
+            continue
         for x, y in ((0, 1), (0, -1), (1, 0), (-1, 0)):
             if 0 <= p[0] + x < W and 0 <= p[1] + y < H and (p[0] + x, p[1] + y) not in visited and data[p[0] + x][p[1] + y] - 1 == data[p[0]][p[1]]:
                 queue.append((p[0] + x, p[1] + y))
