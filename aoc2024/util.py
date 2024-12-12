@@ -74,7 +74,7 @@ class Grid(typing.Generic[T]):
             x, y = cell
             for dx, dy in ((1, 0), (-1, 0), (0, -1), (0, 1)):
                 if 0 <= x + dx < self.width and 0 <= y + dy < self.height:
-                    if is_in_region(cell, self.data[x][y], (x + dx, y + dy), self.data[x+ dx][y + dy]):
+                    if is_in_region(cell, self.data[x][y], (x + dx, y + dy), self.data[x + dx][y + dy]):
                         q.append((x + dx, y + dy))
         return result
 
@@ -91,3 +91,15 @@ class Grid(typing.Generic[T]):
             result.append(cells)
             seen = seen.union(cells)
         return result
+
+    @typing.overload
+    def __getitem__(self, index: tuple[int, int]) -> T: ...
+
+    @typing.overload
+    def __getitem__(self, index: int) -> list[T]: ...
+
+    def __getitem__(self, index):
+        if isinstance(index, tuple):
+            x, y = index
+            return self.data[x][y]
+        return self.data[index]
