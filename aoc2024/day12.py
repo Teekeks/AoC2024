@@ -30,8 +30,8 @@ def process(data):
             for a in (1, -1):
                 x = a if isinstance(w[2], int) else 0
                 y = 0 if x != 0 else a
-                while (w[0] + x, w[1] + y, w[2] + x, w[3] + y) in all_walls:
-                    seen.add((w[0] + x, w[1] + y, w[2] + x, w[3] + y))
+                while (ww := (w[0] + x, w[1] + y, w[2] + x, w[3] + y)) in all_walls:
+                    seen.add(ww)
                     x += a if isinstance(w[2], int) else 0
                     y += 0 if x != 0 else a
             # find first wall not seen yet
