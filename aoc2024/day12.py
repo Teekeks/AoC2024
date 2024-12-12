@@ -26,26 +26,14 @@ def process(data):
         p2 = 0
         while w:
             p2 += 1
-            # walk +-x if x is int
-            if isinstance(w[2], int):
-                x = 1
-                while (w[0] + x, w[1], w[2] + x, w[3]) in all_walls:
-                    seen.add((w[0] + x, w[1], w[2] + x, w[3]))
-                    x += 1
-                x = -1
-                while (w[0] + x, w[1], w[2] + x, w[3]) in all_walls:
-                    seen.add((w[0] + x, w[1], w[2] + x, w[3]))
-                    x -= 1
-            else:
-                # walk +-y
-                y = 1
-                while (w[0], w[1] + y, w[2], w[3] + y) in all_walls:
-                    seen.add((w[0], w[1] + y, w[2], w[3] + y))
-                    y += 1
-                y = -1
-                while (w[0], w[1] + y, w[2], w[3] + y) in all_walls:
-                    seen.add((w[0], w[1] + y, w[2], w[3] + y))
-                    y -= 1
+            # walk current wall in both directions
+            for a in (1, -1):
+                x = a if isinstance(w[2], int) else 0
+                y = 0 if x != 0 else a
+                while (w[0] + x, w[1] + y, w[2] + x, w[3] + y) in all_walls:
+                    seen.add((w[0] + x, w[1] + y, w[2] + x, w[3] + y))
+                    x += a if isinstance(w[2], int) else 0
+                    y += 0 if x != 0 else a
             # find first wall not seen yet
             try:
                 w = next(b for b in all_walls if b not in seen)
