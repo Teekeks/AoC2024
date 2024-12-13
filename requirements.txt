@@ -1,3 +1,4 @@
 requests
 colorama
 more-itertools
+z3-solver
